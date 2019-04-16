@@ -150,7 +150,7 @@ cfg.spikechannel = isih.label{ 1 };
 cfg.interpolate  = 5; % interpolate at 5 times the original density
 cfg.window       = 'gausswin'; % use a gaussian window to smooth
 cfg.winlen       = 0.004;      % the smoothing window has size 4 by 4 ms
-cfg.colormap     = jet( 300 ); % colormap
+cfg.colormap     = parula;     % colormap
 cfg.scatter      = 'no'; % do not plot the individual isis per spike as scatters
 ft_spike_plot_isireturn( cfg, isih );
 title( '(A) FieldTrip' );
@@ -162,6 +162,7 @@ set( gca, 'FontSize', 24 );
 % Tetrode 1(A-a), all channels selected, all segments selected, unit 2 (A-a-1)
 
 %% 2.2.1 Unique tools: locfit (Chronux)
+
 clear
 load( 'MM_S1_raw.mat' );
 nTrials = 140;
@@ -204,6 +205,7 @@ title( 'Smoothed spike rate for 1 trial ');
 
 %% 2.2.2.1 Unique tools: spectrum and spectogram for point-processes (Chronux)
 % spectrogram averaged across trials
+
 clear
 load( 'MM_S1_raw.mat' );
 
@@ -236,7 +238,7 @@ for iUnit = [ 39 44 ]
   [ spectrumValues, cTimeValues, freqValues, rateValues ] = ...
               mtspecgrampt( spikeData, movingWin, params );
   spectrumValues = spectrumValues/max( max( spectrumValues ) );
-  colormap jet;
+  colormap parula;
   imagesc( cTimeValues', freqValues', 10*log10( spectrumValues' ) );
   hc = colorbar;
   title( hc, 'dB/Hz' );
@@ -253,6 +255,7 @@ end
 
 %% 2.2.2.2 Unique tools: spectrum and spectogram for point-processes (Chronux)
 % spectrogram for 1 trial
+
 clear
 load( 'MM_S1_raw.mat' );
 
@@ -278,7 +281,7 @@ for iUnit = [ 14 17 ]
   cnt = cnt + 1;
   [ spectrumValues, cTimeValues, freqValues, rateValues ] = ...
               mtspecgrampt( spikeData, movingWin, params );
-  colormap jet;
+  colormap parula;
   imagesc( cTimeValues', freqValues', 10*log10( spectrumValues' ) );
   hc = colorbar;
   title( hc, 'dB/Hz' );
@@ -744,7 +747,7 @@ for iPlot = 1:2
   set( gca, 'XTick', [] );
   set( gca, 'YTick', [] );
   caxis( colorbarLim );
-  colormap jet
+  colormap parula
   xlim( plotXlim );
   if ( iPlot == 1 )
     title( [ '(D) FieldTrip: multitapers dpss ' num2str( specTime( 4 )/nRuns, '%.2f' ) 's' ] );
@@ -849,7 +852,7 @@ for iPlot = 1:2
   imagesc( mTimeValues, freqValues, powerValues );
   set( gca, 'XTick', [] );
   xlim( plotXlim );
-  colormap jet
+  colormap parula
   axis xy; % flip axis
   caxis( colorbarLim );
   if ( iPlot == 1 )
@@ -909,7 +912,7 @@ idealSpectrumX2 = idealSpectrumX2( realFreq, : );
 subplot( 5, 4, plotIndices( nPlot ) );
 nPlot = nPlot + 1;
 imagesc( timeValues, realFreq, idealSpectrumX1 );
-colormap jet
+colormap parula
 axis xy; % flip axis
 xlim( plotXlim );
 xlabel( 'Time [s]' );
@@ -953,7 +956,7 @@ for iSpectrum = 1:16
   end
   imagesc( abs( temp ) );
   axis xy; % flip axis
-  colormap jet
+  colormap parula
   caxis( [ 0 40 ] );
   if ( iSpectrum < 9 )
     title( tlbxLabels{ iSpectrum }, 'Interpreter', 'Latex' );
@@ -1300,7 +1303,8 @@ jpsthSubtr       = jpsth;
 jpsthSubtr.jpsth = jpsth.jpsth - jpsthShuff.shiftpredictor;
 
 cfg = [];
-cfg.latency = timeSegment;
+cfg.latency  = timeSegment;
+cfg.colormap = parula; 
 figure;
 subplot( 1, 3, 1 );
 ft_spike_plot_jpsth( cfg, jpsth );
@@ -1479,7 +1483,7 @@ for contrastLevel = [ 6 8 ]
   spectrumValues = 10*log10( spectrumValues );
   spectrumValues( spectrumValues < minDb ) = minDb;
   imagesc( ( cTimeValues - 1.0 )', freqValues', spectrumValues' );
-  colormap jet
+  colormap parula
   xlim( plotXlim );
   set( gca, 'XTick', [] );
   caxis( colorbarLim );
