@@ -1098,6 +1098,8 @@ for iRun = 1:nRuns
   FT_FREQ = ft_freqanalysis( cfg2, mdata );
   FT_COH  = ft_connectivityanalysis( cfg3, FT_FREQ );
 end
+% square coherence values to compare with those by Brainstorm
+FT_COH.cohspctrm = FT_COH.cohspctrm.^2;
 FT_CohTime = toc/nRuns;
 
 % one can compute coherence using mtmfft for spectrum estimation: same results
@@ -1141,7 +1143,8 @@ for iDir = 1:3
                                                         movingWin, params );
   end
   chronuxCohTime( iDir ) = toc/nRuns;
-  cohChronux( iDir, : )  = mean( temp );
+  % suqare coherence values to compare with those by Brainstorm
+  cohChronux( iDir, : )  = mean( temp ).^2;
 end
                     
 % compute coherence with Brainstorm for concatenated signal
@@ -1228,18 +1231,18 @@ for iDir = 1:3
   subplot( 3, 3, iDir );
   plot( 0:100/127:100, BS_COH( iDir, : ), 'LineWidth', lWidth ); 
   hold on;
-  plot( freqChronux, cohChronux( iDir, : ), 'LineWidth', lWidth, ...
+  plot( freqChronux, cohChronux( iDir, : ), '--', 'LineWidth', lWidth, ...
       'color', cYellow );
   plot( FT_FREQ.freq, ...
     squeeze( FT_COH.cohspctrm( idxCOH( iDir, 1 ), idxCOH( iDir, 2 ), : ) ), ...
-                       'LineWidth', lWidth, 'color', cRed );                                  
+                       '--', 'LineWidth', lWidth, 'color', cRed );                                  
   legend( [ 'Brainstorm, ' num2str( BS_CohTime( iDir ), '%.2f' ) 's' ], ...
           [ 'Chronux, ' num2str( chronuxCohTime( iDir ), '%.2f' ) 's' ], ...
           [ 'FieldTrip, ' num2str( FT_CohTime/3, '%.2f' ) 's' ] );
   title( [ subLetters{ iDir } ' Coherence ' letters{ iDir } ], ...
                                                   'Interpreter', 'Latex' );
   grid on;
-  ylim( [ 0 1 ] );
+  ylim( [ 0 0.7 ] );
   set( gca, 'FontSize', fSize );
 end
 
