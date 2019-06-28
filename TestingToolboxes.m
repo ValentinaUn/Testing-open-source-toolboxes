@@ -140,7 +140,7 @@ nTrials   = size( spikeData.trialtime, 1 );
 
 cfg        = [];
 cfg.bins   = 0:0.005:0.1; % use bins of 0.5 milliseconds
-cfg.param  = 'coeffvar'; % compute the coefficient of variation (sd/mn of isis)
+cfg.param  = 'coeffvar';  % compute the coefficient of variation (sd/mn of isis)
 cfg.trials = 1:4:nTrials;
 isih       = ft_spike_isi( cfg, spikeData );
 
@@ -150,8 +150,8 @@ cfg.spikechannel = isih.label{ 1 };
 cfg.interpolate  = 5; % interpolate at 5 times the original density
 cfg.window       = 'gausswin'; % use a gaussian window to smooth
 cfg.winlen       = 0.004;      % the smoothing window has size 4 by 4 ms
-cfg.colormap     = parula;     % colormap
-cfg.scatter      = 'no'; % do not plot the individual isis per spike as scatters
+cfg.colormap     = jet;        % colormap
+cfg.scatter      = 'no';       % do not plot the individual isis per spike as scatters
 ft_spike_plot_isireturn( cfg, isih );
 title( '(A) FieldTrip' );
 caxis( [ 0 4 ] );
@@ -378,11 +378,11 @@ filtTime = filtTime*1000;
 timeInt = 1:800;
 figure;
 fontSize = 24;
-subplot( 3, 4, 1 );
+subplot( 5, 2, 1 );
 plot( timeValues( timeInt ), noisyData( timeInt ), ...
   timeValues( timeInt ), matlabFilt( timeInt ), 'LineWidth', 2 );
-%set( gca, 'XTick', [] );
-xlabel( 'Time (s)' );
+set( gca, 'XTick', [] );
+%xlabel( 'Time (s)' );
 ylabel( 'Voltage (V)' );
 legend( 'Unfiltered', 'MATLAB filtered' );
 title( '(A) Open-Loop Voltage' );
@@ -390,25 +390,27 @@ axis tight
 grid on
 set( gca, 'FontSize', fontSize );
 
-subplot( 3, 4, 2 );
+subplot( 5, 2, 3 );
 plot( timeValues( timeInt ), noisyData( timeInt ), ...
   timeValues( timeInt ), chronuxFilt( timeInt ), 'LineWidth', 2 );
-xlabel( 'Time (s)' );
+set( gca, 'XTick', [] );
+%xlabel( 'Time (s)' );
 legend( 'Unfiltered', 'Chronux filtered' );
 axis tight
 grid on
 set( gca, 'FontSize', fontSize );
 
-subplot( 3, 4, 3 );
+subplot( 5, 2, 5 );
 plot( timeValues( timeInt ), noisyData( timeInt ), ...
   timeValues( timeInt ), fieldtripFilt( timeInt ), 'LineWidth', 2 );
-xlabel( 'Time (s)' );
+set( gca, 'XTick', [] );
+%xlabel( 'Time (s)' );
 legend( 'Unfiltered', 'FieldTrip filtered' );
 axis tight
 grid on
 set( gca, 'FontSize', fontSize );
 
-subplot( 3, 4, 4 );
+subplot( 5, 2, 7 );
 plot( timeValues( timeInt ), noisyData( timeInt ), ...
   timeValues( timeInt ), brainstormFilt( timeInt ), 'LineWidth', 2 );
 legend( 'Unfiltered', 'Brainstorm filtered' );
@@ -423,47 +425,48 @@ set( gca, 'FontSize', fontSize );
 [ pFieldTrip, fFieldTrip ]   = periodogram( fieldtripFilt, [], [], Fs );
 [ pBrainstorm, fBrainstorm ] = periodogram( brainstormFilt, [], [], Fs );
 
-subplot( 3, 4, 5 );
+subplot( 5, 2, 2 );
 % *20 because of power transfer, P = UxI=U^2/R, T = 10log(P_out/P_in)=10log()
 %https://www.physicsforums.com/threads/confusion-with-db-equation-10-or-20.641850/
 freqToPlot = 50:206; % indices for frequencies to plot
 plot( fOriginal( freqToPlot ), 20*log10( abs( pOriginal( freqToPlot ) ) ), ...
       fOriginal( freqToPlot ), 20*log10( abs( pMATLAB( freqToPlot ) ) ), ...
                                                       '--', 'LineWidth', 2 );
+set( gca, 'XTick', [] );
 legend( 'Unfiltered', [ 'MATLAB filtered, ' num2str( filtTime( 1 ), '%.2f' ) 'ms' ] );
 title( '(B) Power Spectrum' );
-xlabel( 'Frequency (Hz)' );
+%xlabel( 'Frequency (Hz)' );
 set( gca, 'FontSize', fontSize );
 ylabel( 'Power/frequency (dB/Hz)' );
 axis tight
 grid on
 ylim( [ -120 20 ] );
 
-subplot( 3, 4, 6 );
+subplot( 5, 2, 4 );
 plot( fOriginal( freqToPlot ), 20*log10( abs( pOriginal( freqToPlot ) ) ), ...
       fOriginal( freqToPlot ), 20*log10( abs( pChronux( freqToPlot ) ) ), ...
       '--', 'LineWidth', 2  );
-%set( gca, 'XTick', [] );
+set( gca, 'XTick', [] );
 legend( 'Unfiltered', ['Chronux filtered, ' num2str( filtTime( 2 ), '%.2f') 'ms' ] );
 set( gca, 'FontSize', fontSize );
-xlabel( 'Frequency (Hz)' );
+%xlabel( 'Frequency (Hz)' );
 axis tight
 grid on
 ylim( [ -120 20 ] );
 
-subplot( 3, 4, 7 );
+subplot( 5, 2, 6 );
 plot( fOriginal( freqToPlot ), 20*log10( abs( pOriginal( freqToPlot ) ) ), ...
       fOriginal( freqToPlot ), 20*log10( abs( pFieldTrip( freqToPlot ) ) ), ...
       '--', 'LineWidth', 2  );
-%set( gca, 'XTick', [] );
+set( gca, 'XTick', [] );
 legend( 'Unfiltered', [ 'FieldTrip filtered, ' num2str( filtTime( 3 ), '%.2f') 'ms' ] );
 set( gca, 'FontSize', fontSize );
-xlabel( 'Frequency (Hz)' );
+%xlabel( 'Frequency (Hz)' );
 axis tight
 grid on
 ylim( [ -120 20 ] );
 
-subplot( 3, 4, 8 );
+subplot( 5, 2, 8 );
 plot( fOriginal( freqToPlot ), 20*log10( abs( pOriginal( freqToPlot ) ) ), ...
       fOriginal( freqToPlot ), 20*log10( abs( pBrainstorm( freqToPlot ) ) ), ...
       '--', 'LineWidth', 2  );
@@ -490,7 +493,7 @@ for iFreq = [ 1:123 125:length( fOriginal ) ]
 end
 MSE( : ) = MSE( : )/( length( fOriginal ) - 2 );
 
-subplot( 3, 1, 3 );
+subplot( 5, 1, 5 );
 hBar = bar( MSE );
 hBar.FaceColor = [ 0 0.4470 0.7410 ];
 set( gca, 'XTickLabel', {'MATLAB', 'Chronux', 'FieldTrip', 'Brainstorm' } );
@@ -648,6 +651,7 @@ for iPlot = 1:2
   coefsBrainstorm( coefsBrainstorm < minDb ) = minDb;
   estSpectra{ nPlot - 1 } = coefsBrainstorm;
   imagesc( timeValues, 2:2:80, coefsBrainstorm );
+  colormap jet
   axis xy; % flip axis
   caxis( colorbarLim );
   xlim( plotXlim );
@@ -680,6 +684,7 @@ for iPlot = 1:2
   estFreq{ nPlot - 1 }    = freqValues;
   estSpectra{ nPlot - 1 } = spectrumValues';
   imagesc( ( cTimeValues )', freqValues', spectrumValues' );
+  colormap jet
   xlim( plotXlim );
   set( gca, 'XTick', [] );
   caxis( colorbarLim );
@@ -704,6 +709,7 @@ for iPlot = 1:2
   powerValues( powerValues < minDb ) = minDb;
   estSpectra{ nPlot - 1 } = powerValues;
   imagesc( timeValues, freqOfInterest, powerValues );
+  colormap jet
   axis xy; % flip axis
   caxis( colorbarLim );
   xlim( plotXlim );
@@ -747,7 +753,7 @@ for iPlot = 1:2
   set( gca, 'XTick', [] );
   set( gca, 'YTick', [] );
   caxis( colorbarLim );
-  colormap parula
+  colormap jet
   xlim( plotXlim );
   if ( iPlot == 1 )
     title( [ '(D) FieldTrip: multitapers dpss ' num2str( specTime( 4 )/nRuns, '%.2f' ) 's' ] );
@@ -852,7 +858,7 @@ for iPlot = 1:2
   imagesc( mTimeValues, freqValues, powerValues );
   set( gca, 'XTick', [] );
   xlim( plotXlim );
-  colormap parula
+  colormap jet
   axis xy; % flip axis
   caxis( colorbarLim );
   if ( iPlot == 1 )
@@ -912,7 +918,7 @@ idealSpectrumX2 = idealSpectrumX2( realFreq, : );
 subplot( 5, 4, plotIndices( nPlot ) );
 nPlot = nPlot + 1;
 imagesc( timeValues, realFreq, idealSpectrumX1 );
-colormap parula
+colormap jet
 axis xy; % flip axis
 xlim( plotXlim );
 xlabel( 'Time [s]' );
@@ -956,7 +962,7 @@ for iSpectrum = 1:16
   end
   imagesc( abs( temp ) );
   axis xy; % flip axis
-  colormap parula
+  colormap jet
   caxis( [ 0 40 ] );
   if ( iSpectrum < 9 )
     title( tlbxLabels{ iSpectrum }, 'Interpreter', 'Latex' );
@@ -1215,7 +1221,7 @@ for iDir = 1:6
   freqBS2 = squeeze( freqBS2 );
 end
 
-% plotting connectivity analysis results
+%% plotting connectivity analysis results
 fSize  = 26;
 lWidth = 4;
 figure;
@@ -1229,13 +1235,13 @@ cRed    = [ 0.8500 0.3250 0.0980 ];
 
 for iDir = 1:3
   subplot( 3, 3, iDir );
-  plot( 0:100/127:100, BS_COH( iDir, : ), 'LineWidth', lWidth ); 
+  plot( 0:100/127:100, BS_COH( iDir, : ), 'LineWidth', 6 ); 
   hold on;
-  plot( freqChronux, cohChronux( iDir, : ), '--', 'LineWidth', lWidth, ...
+  plot( freqChronux, cohChronux( iDir, : ), '-.', 'LineWidth', 6, ...
       'color', cYellow );
   plot( FT_FREQ.freq, ...
     squeeze( FT_COH.cohspctrm( idxCOH( iDir, 1 ), idxCOH( iDir, 2 ), : ) ), ...
-                       '--', 'LineWidth', lWidth, 'color', cRed );                                  
+                       '-.', 'LineWidth', 4, 'color', cRed );                                  
   legend( [ 'Brainstorm, ' num2str( BS_CohTime( iDir ), '%.2f' ) 's' ], ...
           [ 'Chronux, ' num2str( chronuxCohTime( iDir ), '%.2f' ) 's' ], ...
           [ 'FieldTrip, ' num2str( FT_CohTime/3, '%.2f' ) 's' ] );
@@ -1253,10 +1259,19 @@ subletters = {'(D)','(E)','(F)','(G)','(H)','(I)'};
 % ! for Brainstorm the direction is reversed ! %
 for iDir = 1:6
   subplot( 3, 3, iDir + 3 );
-  plot( GC_BS{ idxGC( iDir, 2 ), idxGC( iDir, 1 ) }, 'LineWidth', lWidth ); 
+  if ( iDir == 1 || iDir == 2 || iDir == 6 )
+    lWidth1 = 6;
+    lWidth2 = 6;
+    lWidth  = 6;
+  else
+    lWidth1 = 10;
+    lWidth2 = 7;
+    lWidth  = 3;
+  end
+  plot( GC_BS{ idxGC( iDir, 2 ), idxGC( iDir, 1 ) }, 'LineWidth', lWidth1 ); 
   hold on;
   plot( GC_FT.freq, squeeze( GC_FT.grangerspctrm( idxGC( iDir, 1 ), ...
-                        idxGC( iDir, 2 ), : ) ), 'LineWidth', lWidth );           
+                        idxGC( iDir, 2 ), : ) ), 'LineWidth', lWidth2 );    
   plot( DTF_FT.freq, squeeze( DTF_FT.dtfspctrm( idxGC( iDir, 1 ), ...
          idxGC( iDir, 2 ), : ) ), 'LineWidth', lWidth, 'color', cViolet );
   plot( PDC_FT.freq, squeeze( PDC_FT.pdcspctrm( idxGC( iDir, 1 ), ...
@@ -1307,7 +1322,7 @@ jpsthSubtr.jpsth = jpsth.jpsth - jpsthShuff.shiftpredictor;
 
 cfg = [];
 cfg.latency  = timeSegment;
-cfg.colormap = parula; 
+cfg.colormap = jet; 
 figure;
 subplot( 1, 3, 1 );
 ft_spike_plot_jpsth( cfg, jpsth );
@@ -1486,7 +1501,7 @@ for contrastLevel = [ 6 8 ]
   spectrumValues = 10*log10( spectrumValues );
   spectrumValues( spectrumValues < minDb ) = minDb;
   imagesc( ( cTimeValues - 1.0 )', freqValues', spectrumValues' );
-  colormap parula
+  colormap jet
   xlim( plotXlim );
   set( gca, 'XTick', [] );
   caxis( colorbarLim );
@@ -1578,7 +1593,6 @@ for contrastLevel = [ 6 8 ]
   cfg.output    = 'pow';
   % times on which analysis windows should be centered
   cfg.toi       = timeSegment( 1 ):windowStep/fSample:timeSegment( 2 );
-  % standard parameters
   cfg.width     = morletFTwidth;
   
   tic;
