@@ -4,7 +4,7 @@ These are supplementary files for the bioRxiv preprint "Comparing open-source to
 
 Description of data files:
 
-1 Please, upload the file MM_S1_raw.mat from https://crcns.org/data-sets/motor-cortex/pmd-1/about-pmd-1
+1 MM_S1_raw.mat needed for running scripts can be uploaded from https://crcns.org/data-sets/motor-cortex/pmd-1/about-pmd-1 (it's size is ~122Mb and cannot be placed on GitHub)
 
 2 additiveNoise.mat: the data were generated as additiveNoise = randn( 1, 2001 ) and saved in mat file for repeatability of the results
 
