@@ -1,6 +1,6 @@
 # Testing-open-source-toolboxes
 
-These are supplementary files for the bioRxiv preprint "Comparing open-source toolboxes for processing and analysis of spike and local field potentials data": https://www.biorxiv.org/content/10.1101/600486v1. The aim of this contribution is to test and compare functionality of major open-source toolboxes for spike and local field potentials (LFPs) data analysis and processing.
+These are supplementary files for the Frontiers paper "Comparing open-source toolboxes for processing and analysis of spike and local field potentials data": https://www.frontiersin.org/articles/10.3389/fninf.2019.00057/full. The aim of this contribution is to test and compare functionality of major open-source toolboxes for spike and local field potentials (LFPs) data analysis and processing.
 
 Description of data files:
 
